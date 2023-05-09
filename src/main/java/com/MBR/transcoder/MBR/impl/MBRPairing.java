@@ -1,15 +1,12 @@
 package com.MBR.transcoder.MBR.impl;
 
 
-import org.springframework.data.cassandra.core.mapping.PrimaryKey;
-import org.springframework.data.cassandra.core.mapping.Table;
-
-
-@Table
+//@Table
 public class MBRPairing {
 
-    @PrimaryKey
-    private int RequestId;
+    //@PrimaryKey
+    private String RequestId;
+
     private String CustomerId;
     private String file;
     private String protocol;
@@ -23,11 +20,11 @@ public class MBRPairing {
     private float size;
     private String mbrinstance;
 
-    public int getRequestId() {
+    public String getRequestId() {
         return RequestId;
     }
 
-    public void setRequestId(int requestId) {
+    public void setRequestId(String requestId) {
         RequestId = requestId;
     }
 

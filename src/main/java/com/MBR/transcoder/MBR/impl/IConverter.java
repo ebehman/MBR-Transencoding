@@ -10,11 +10,11 @@ public interface IConverter
 {
 static final Logger logger = LoggerFactory.getLogger(HLSChunkConverter.class);
 void convert();
-void convert(int requestid, String customer,VodInfo vod,String filename,MediaInfo mf);
+void convert(String requestid, String customer,VodInfo vod,String filename,MediaInfo mf);
 
 static String getworkingDirectoy(String customer,String filename)
 {
-	String cdir = "/usr/local/mbr/"+customer;
+	String cdir = "/var/volume/mbr/"+customer;
 	File c_dir = new File(cdir);
 	if(!c_dir.exists())
 	{

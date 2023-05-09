@@ -1,5 +1,10 @@
 package com.MBR.transcoder.MBR.impl;
 
+import com.MBR.transcoder.MBR.model.SetTranscodingInput;
+import com.MBR.transcoder.MBR.model.VodInfo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -14,10 +19,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import com.MBR.transcoder.MBR.model.SetTranscodingInput;
-import com.MBR.transcoder.MBR.model.VodInfo;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 
 /**
@@ -30,6 +31,8 @@ public class Transencoder
 {
 	private static final Logger logger = LoggerFactory.getLogger(Transencoder.class);
 	private static Integer numofth = 4;
+	//@Autowired
+	//MBRRepositry mbrRepositry;
 
 	/**
 	 * This regexp is used to parse the ffmpeg output about the size of a video
@@ -305,7 +308,7 @@ MediaInfo getInfo(String source) throws IOException, InputFormatException, Encod
 	}
 	
 
-	  public void transcoder(int requestid,String customer, VodInfo vod,final String filename,MediaInfo mf) throws InterruptedException 
+	  public void transcoder(String requestid,String customer, VodInfo vod,final String filename,MediaInfo mf) throws InterruptedException
 	{
 		
 		  Thread mp4t = null;	 
@@ -406,10 +409,10 @@ MediaInfo getInfo(String source) throws IOException, InputFormatException, Encod
 						try {
 							// Getting the file into local directory for ffmpeg computation 
 							String customer = input.getCustomerId();
-							int requestid = 4094;
+							String requestid = input.getRequestId();
 						//String iwf = getMedia(customer,vodinfo.getIfolder(),file);
 							// if Ifloder has the file or not
-							MediaInfo mf = getInfo(vodinfo.getIfolder());
+							MediaInfo mf = getInfo(vodinfo.getIfolder()+"/"+file);
 						if (mf!= null) {
 							logger.info(mf.toString());
 							transcoder(requestid,customer, vodinfo, file,mf);
@@ -442,6 +445,7 @@ MediaInfo getInfo(String source) throws IOException, InputFormatException, Encod
 									mbrPairing.setSize(0);
 									mbrPairing.setMbrinstance(InetAddress.getLocalHost().getHostName());
 									//insert to DB;
+									//mbrRepositry.save(mbrPairing);
 
 								}
 								
@@ -466,6 +470,7 @@ MediaInfo getInfo(String source) throws IOException, InputFormatException, Encod
 									mbrPairing.setSize(0);
 									mbrPairing.setMbrinstance(InetAddress.getLocalHost().getHostName());
 									//insert to DB;
+									//mbrRepositry.save(mbrPairing);
 								}
 									
 							}

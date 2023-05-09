@@ -14,7 +14,8 @@ FROM openjdk:8-jdk-alpine
 RUN apk add  --no-cache ffmpeg
 
 ENV POC_BIN="/opt/bin/mbr" \
-    POC_LOG="/var/log/mbr"
+    POC_LOG="/var/log/mbr" \
+    POC_VOL="/var/volume"
 
 RUN mkdir -p $POC_BIN
 WORKDIR $POC_BIN
@@ -23,6 +24,8 @@ COPY --from=0 /src/target/MBR-1.0-SNAPSHOT.jar $POC_BIN
 
 RUN mkdir -p $POC_LOG
 RUN chmod 777 $POC_LOG
+RUN mkdir -p $POC_VOL
+RUN chmod 777 $POC_VOL
 RUN chmod -R 777 $POC_BIN
 
 CMD ["java","-jar","/opt/bin/mbr/MBR-1.0-SNAPSHOT.jar"]

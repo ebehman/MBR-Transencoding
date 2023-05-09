@@ -7,13 +7,22 @@ import java.util.List;
 
 @ApiModel(value = "SetTranscodingInput")
 public class SetTranscodingInput {
-	
+
+	private String RequestId;
 	@ApiModelProperty(dataType="String",example="CustomerId",notes = "Customer unique ID")
 	private String CustomerId;
 	@ApiModelProperty(dataType="List",example="[File1,File2]", notes = "file name" )
 	private List<String> files;
 	private VodInfo preset;
-	
+
+	public String getRequestId() {
+		return RequestId;
+	}
+
+	public void setRequestId(String requestId) {
+		RequestId = requestId;
+	}
+
 	public String getCustomerId() {
 		return CustomerId;
 	}
@@ -36,10 +45,11 @@ public class SetTranscodingInput {
 
 	@Override
 	public String toString() {
-		return "SetTranscodingInput [CustomerId=" + CustomerId + 
-				", files=" + files + 
-				",preset=" +preset.toString()+"]";
+		return "SetTranscodingInput{" +
+				"RequestId='" + RequestId + '\'' +
+				", CustomerId='" + CustomerId + '\'' +
+				", files=" + files +
+				", preset=" + preset +
+				'}';
 	}
-	
-	
 }

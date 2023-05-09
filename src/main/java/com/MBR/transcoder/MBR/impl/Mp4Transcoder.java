@@ -30,7 +30,7 @@ public class Mp4Transcoder implements IConverter
 		
 	}
 
-	public void convert(int requestid, String customer, VodInfo vod, String filename, MediaInfo mf) {
+	public void convert(String requestid, String customer, VodInfo vod, String filename, MediaInfo mf) {
 		// TODO Auto-generated method stub
 		ExecutorService executor = Executors.newFixedThreadPool(numofth);
 		String file = IConverter.getworkingDirectoy(customer,filename.replace(".mp4", ""));
@@ -108,7 +108,7 @@ public class Mp4Transcoder implements IConverter
 						mbrPairing.setResponse_code("1");
 						mbrPairing.setResponse_code("InProgress");
 						mbrPairing.setPID(PID);
-						mbrPairing.setFileinfo(mf);
+						//mbrPairing.setFileinfo(mf);
 						mbrPairing.setStartTime(startime.toString());
 						mbrPairing.setDuration(duration);
 						mbrPairing.setSize(fileSize);

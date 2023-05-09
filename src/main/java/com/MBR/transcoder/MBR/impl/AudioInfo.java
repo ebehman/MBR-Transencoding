@@ -3,15 +3,13 @@
  */
 package com.MBR.transcoder.MBR.impl;
 
-import org.springframework.data.cassandra.core.mapping.UserDefinedType;
-
 import java.io.Serializable;
 
 /**
  * @author MANASRANJAN BEHERA
  *
  */
-@UserDefinedType
+//@UserDefinedType
 public class AudioInfo implements Serializable
 {
 

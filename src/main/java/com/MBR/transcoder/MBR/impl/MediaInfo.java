@@ -1,11 +1,9 @@
 package com.MBR.transcoder.MBR.impl;
 
-import org.springframework.data.cassandra.core.mapping.UserDefinedType;
-
 /*
  * Instances of this class will report the information about the a Media File 
  */
-@UserDefinedType
+//@UserDefinedType
 public class MediaInfo 
 {
 	

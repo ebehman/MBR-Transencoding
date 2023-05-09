@@ -1,5 +1,9 @@
 package com.MBR.transcoder.MBR.impl;
 
+import com.MBR.transcoder.MBR.model.VodInfo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.Reader;
@@ -12,30 +16,24 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 
-import com.MBR.transcoder.MBR.model.VodInfo;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-
-
 public class HLSChunkConverter implements IConverter {
 	
 	private static final Logger logger = LoggerFactory.getLogger(HLSChunkConverter.class);
     private static Integer numofth = 4;
-    @Autowired
-	private MBRRepositry mbrRepositry;
+    //@Autowired
+	//private MBRRepositry mbrRepositry;
 
 	public void convert() {
 		// TODO Auto-generated method stub
 		
 	}
 
-	public void convert(int requestid, String customer, VodInfo vod, String filename, MediaInfo mf) {
+	public void convert(String requestid, String customer, VodInfo vod, String filename, MediaInfo mf) {
 		// TODO Auto-generated method stub
 		// TODO Auto-generated method stub
 				ExecutorService executor = Executors.newFixedThreadPool(numofth);
 				String wd = IConverter.getworkingDirectoy(customer,filename.replace(".mp4", ""));
-				String source = "/usr/local/mbr/"+customer+"/"+filename;
+				String source = "/var/volume/"+customer+"/"+filename;
 				ConcurrentHashMap<String, String> mchm = new ConcurrentHashMap<String, String>();
 				
 				try {
@@ -58,7 +56,6 @@ public class HLSChunkConverter implements IConverter {
 						@Override
 						public void run() 
 						{
-							
 							FFMPEGExecutor ffmpegexecutor = new FFMPEGExecutor("ffmpeg");
 							ffmpegexecutor.addArgument(source);
 							ffmpegexecutor.addArgument("-profile:v");
@@ -91,6 +88,10 @@ public class HLSChunkConverter implements IConverter {
 							ffmpegexecutor.addArgument("0");
 							ffmpegexecutor.addArgument("-f");
 							ffmpegexecutor.addArgument("hls");
+							if(isEnc) {
+								ffmpegexecutor.addArgument("-hls_key_info_file");
+								ffmpegexecutor.addArgument(vod.getEnckey());
+							}
 							ffmpegexecutor.addArgument("-hls_segment_filename");
 							ffmpegexecutor.addArgument(wd+"/"+Tfilename+"_%01d.ts");
 							ffmpegexecutor.addArgument(wd+"/"+Tfilename+".m3u8");
@@ -127,7 +128,7 @@ public class HLSChunkConverter implements IConverter {
 								mbrPairing.setDuration(duration);
 								mbrPairing.setSize(fileSize);
 								mbrPairing.setMbrinstance(InetAddress.getLocalHost().getHostName());
-                                mbrRepositry.save(mbrPairing);
+                                //mbrRepositry.save(mbrPairing);
 
 								Reader reader = new BufferedReader(new InputStreamReader(ffmpegexecutor.getInputStream()));
 								try(BufferedReader bufferedReader =
@@ -170,7 +171,7 @@ public class HLSChunkConverter implements IConverter {
 									mbrPairing.setDuration(duration);
 									mbrPairing.setSize(fileSize);
 									logger.info(" Request and file detail "+requestid+" "+mf.toString()+"FFMPEGPID :"+PID);
-                                    mbrRepositry.save(mbrPairing);
+                                     //mbrRepositry.save(mbrPairing);
 								//Update the MBR_Record table for the particular file its status,duration,size,&statuschange timestamp regarding the Conversion.
 													
 							}
@@ -181,7 +182,7 @@ public class HLSChunkConverter implements IConverter {
 								mbrPairing.setResponse_code("2");
 								mbrPairing.setResponse_code("Failed");
 								//Update the DB for failed status,duration,size & statuschange timestamp
-								mbrRepositry.save(mbrPairing);
+								//mbrRepositry.save(mbrPairing);
 								//DBconnection.UpdateTranscoder(conn, 2, "Failed", final_status_updated, fileSize, duration, requestid,filename,"HLS",Vbitrate[i],customer);
 								Thread.currentThread().interrupt();
 								

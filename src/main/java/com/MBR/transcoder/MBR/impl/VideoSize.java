@@ -3,8 +3,6 @@
  */
 package com.MBR.transcoder.MBR.impl;
 
-import org.springframework.data.cassandra.core.mapping.UserDefinedType;
-
 import java.io.Serializable;
 
 /**
@@ -12,7 +10,7 @@ import java.io.Serializable;
  * Instances of this class will report the video file size information.
  *
  */
-@UserDefinedType
+//@UserDefinedType
 public class VideoSize implements Serializable
 {
 private static final long serialVersionUID =1L;

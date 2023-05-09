@@ -4,13 +4,11 @@
 package com.MBR.transcoder.MBR.impl;
 
 
-import org.springframework.data.cassandra.core.mapping.UserDefinedType;
-
 /**
  * @author MANASRANJAN BEHERA
  * Instances of the class will report aboout the information the V codecs of the media file.
  */
-@UserDefinedType
+//@UserDefinedType
 public class VideoInfo 
 {
 private String decoder ;

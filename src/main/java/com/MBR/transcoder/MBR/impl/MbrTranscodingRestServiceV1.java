@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.ws.rs.Produces;
 import java.net.HttpURLConnection;
+import java.util.UUID;
 
 @Produces({"application/json","application/xml"})
 @RestController
@@ -26,7 +27,7 @@ public class MbrTranscodingRestServiceV1 {
 
 	
 	private static final Logger logger = LoggerFactory.getLogger(MbrTranscodingRestServiceV1.class);
-	@RequestMapping(value = "/Api/set-Mbr-transcoding", method = RequestMethod.POST,
+	@RequestMapping(value = "/set-Mbr-transcoding", method = RequestMethod.POST,
 			consumes = MediaType.APPLICATION_JSON_VALUE,
 			produces= MediaType.APPLICATION_JSON_VALUE)
 	@ApiOperation(value = "API for video transcoding", notes = "video transcoding")
@@ -38,10 +39,12 @@ public class MbrTranscodingRestServiceV1 {
 	public ResponseEntity<SetTranscodingOutput> setTranscoding(@RequestBody SetTranscodingInput input ) {
 		
 		SetTranscodingOutput output = new SetTranscodingOutput();
+
 		long startTime = System.currentTimeMillis();
 		logger.info(input.toString());
 		Transencoder transencoder = new Transencoder();
-		
+		String UUID = java.util.UUID.randomUUID().toString();
+		input.setRequestId(UUID);
 		new Thread(new Runnable() 
 		{
 			
@@ -50,7 +53,9 @@ public class MbrTranscodingRestServiceV1 {
 		transencoder.multiConverter(input);
 			}
 		}).start();
-		
+		output.setCustomerId(input.getCustomerId());
+		output.setFiles(input.getFiles());
+		output.setRequestId(input.getRequestId());
 		return new ResponseEntity(output, HttpStatus.OK);
 		
 //				Response.status(202)
@@ -59,6 +64,9 @@ public class MbrTranscodingRestServiceV1 {
 
 		
 	}
-
+	@RequestMapping(value="/hello")
+public String Hello(){
+		return "I am manas";
+	}
 	
 }

@@ -9,7 +9,7 @@ public class DASHChunkConverter implements IConverter {
     }
 
     @Override
-    public void convert(int requestid, String customer, VodInfo vod, String filename, MediaInfo mf) {
+    public void convert(String requestid, String customer, VodInfo vod, String filename, MediaInfo mf) {
 
     }
 }
