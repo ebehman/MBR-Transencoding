@@ -46,7 +46,7 @@ public class HLSChunkConverter implements IConverter {
 				List<String> Aspect = vod.getAspectratio();
 				boolean isEnc = vod.getEnckey()!= null && !vod.getEnckey().isEmpty();
 				logger.info("VideoBitRate List size "+Vbitrate.size());
-				for(int j=0;j<=Vbitrate.size();j++)
+				for(int j=0;j<Vbitrate.size();j++)
 				{
 					final int i = new Integer(j);
 					String Tfilename = filename.replace(".mp4", "")+"_"+Vbitrate.get(i)+"k";
@@ -157,7 +157,7 @@ public class HLSChunkConverter implements IConverter {
 								
 								// Creation of Master playlist for all the conversion for HLS Protocol
 								String  bitrate = String.valueOf((Integer.valueOf(Vbitrate.get(i))+Integer.valueOf(Abitrate.get(i)))* 1000)+",RESOLUTION="+Resoultion.get(i);
-								String  playlistloc = Vbitrate.get(i)+"k/HLS/"+Tfilename+".m3u8";
+								String  playlistloc = Tfilename+".m3u8";
 								mchm.put("#EXT-X-STREAM-INF:BANDWIDTH="+bitrate, playlistloc);
 								
 								fileSize = MBRUtils.gettransFilesSize(wd, Tfilename);
@@ -191,29 +191,29 @@ public class HLSChunkConverter implements IConverter {
 							catch (Exception  e) {
 								// TODO Auto-generated catch block
 								//e.printStackTrace();
-								ffmpegexecutor.destroy();
+							//	ffmpegexecutor.destroy();
 								logger.error(e.getMessage(),e.fillInStackTrace());
 								Thread.currentThread().interrupt();
 						}
-							finally
-							
-							{
+							finally {
 								ffmpegexecutor.destroy();
 								logger.info("Removing the ffmpeg command");
-							}			
+							}
 						}
 					};
+
 					executor.execute(ffmpegworker);	
 				
 				}
-					executor.shutdown();
+				    executor.shutdown();
+
 					while (!executor.isTerminated()) 
 					{
 					}
 					logger.info("Finished all ffmpeg threads for HLS chunk conversion "+filename);
 
-				
-				new ManifestCreator().HLSManifestCreator(wd, mchm, filename);
+					new ManifestCreator().HLSManifestCreator(wd, mchm, filename);
+
 				/*boolean ispushMaster = MBRUtils.pushMasterplaylist(vod.getDfolder(), wd, filename.replace(".mp4", ""));
 				if (ispushMaster)
 				{
@@ -228,9 +228,17 @@ public class HLSChunkConverter implements IConverter {
 
 				catch(Exception e )
 				{
+					logger.info("Shuting down the executor framework started");
+					executor.shutdown();
+					logger.info("Shuting down the executor framework end");
+					while (!executor.isTerminated())
+					{
+					}
+					logger.info("Finished all ffmpeg threads for HLS chunk conversion "+filename);
 					logger.error("Invalid preset Data "+e.getMessage());
 					logger.debug(e.getMessage(), e.fillInStackTrace());
 				}
+
 				
 			}
 			
